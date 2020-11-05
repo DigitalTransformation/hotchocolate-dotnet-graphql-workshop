@@ -1,1 +1,12 @@
-# Gitignore
+# ---------------
+# GITIGNORE
+# ---------------
+
+# Development Environment
+.vscode/
+.idea/
+
+# Dotnet Build Env
+**/obj/
+**/build/
+**/bin/
