@@ -28,7 +28,7 @@ namespace GraphQL
             Configuration = builder.Build();
         }
 
-        private static IConfiguration Configuration { get; set; }
+        public static IConfiguration Configuration { get; set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
