@@ -64,5 +64,14 @@ namespace GraphQL.Providers
             }
         }
 
+        public static string ActiveSshConnections(SshClient client)
+        {
+            // State:SshdConnections
+            string cmd = $"sudo lsof -i -n | grep sshd";
+            string replConsole = client.RunCommand(cmd).Result;
+            _logger.LogInformation(replConsole);
+
+            return replConsole;
+        }
     }
 }
