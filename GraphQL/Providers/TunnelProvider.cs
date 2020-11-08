@@ -32,5 +32,37 @@ namespace GraphQL.Providers
                 },
             };
         }
+
+        public static (SshClient TunnelClient, ForwardedPortLocal PortLocal) HookDatabase(
+            SshClient client, string endpoint, uint port)
+        {
+            try
+            {
+                // Connect:SshTunnel
+                client.HostKeyReceived += (sender, e) =>
+                    e.CanTrust = true;
+                client.Connect();
+                _logger.LogInformation("Established tunnel to client.");
+
+                // Tunnel:PortForward:Endpoint
+                ForwardedPortLocal portLocal =
+                    new ForwardedPortLocal(
+                        "127.0.0.1",
+                        endpoint,
+                        port);
+                client.AddForwardedPort(portLocal);
+                portLocal.Exception += (sender, e) =>
+                    _logger.LogInformation(e.Exception.ToString());
+                portLocal.Start();
+
+                // Return:SshTunnel:DatabaseHookClient
+                return (client, portLocal);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException($"Could not establish tunnel. {ex}");
+            }
+        }
+
     }
 }
