@@ -73,5 +73,33 @@ namespace GraphQL.Providers
 
             return replConsole;
         }
+
+        public static (string HttpResponseContent, bool TunnelState) SshPortForwardState(SshClient client)
+        {
+            // Tunnel:PortForward:HTTP
+            ForwardedPortLocal _webPort =
+                new ForwardedPortLocal(
+                    "127.0.0.1",
+                    "http://checkip.amazonaws.com",
+                    80);
+            client.AddForwardedPort(_webPort);
+            _webPort.Exception += (sender, e) =>
+                throw new ArgumentException(e.Exception.ToString());
+            _webPort.Start();
+
+            // Check:Tunnel State
+            using HttpClient http = new HttpClient();
+            HttpResponseMessage response = http.GetAsync($"{_webPort.BoundHost}:{_webPort.BoundPort}")
+                .GetAwaiter().GetResult();
+            string content = response.Content
+                .ReadAsStringAsync()
+                .GetAwaiter().GetResult();
+
+            bool state = !string.IsNullOrEmpty(content) ? true : false;
+
+            _logger.LogInformation($"Tunnel Endpoint Response: {content} \n Tunnel State: {state}");
+
+            return (content, state);
+        }
     }
 }
