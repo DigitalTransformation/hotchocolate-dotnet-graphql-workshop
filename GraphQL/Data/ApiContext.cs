@@ -1,10 +1,11 @@
 namespace GraphQL.Data
 {
-    using System;
+    using GraphQL.Providers;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
     using Npgsql;
+    using Renci.SshNet;
 
     public class ApiContext : DbContext
     {
@@ -17,8 +18,40 @@ namespace GraphQL.Data
             _configuration.GetSection("DataBinding:Postgres");
 
         private static string _connectionStr;
+
+        private static SshClient _client;
+
+        public ApiContext(DbContextOptions<ApiContext> options, ILogger<ApiContext> logger)
             : base(options)
         {
+            _logger = logger;
+
+            // Build Default ConnStr
+            string endpoint = new NpgsqlConnectionStringBuilder(_dbSection["ConnectionString"]).Host;
+            _logger.LogInformation($"Buffer endpoint: {endpoint}");
+            uint port = uint.Parse(_dbSection["Port"]);
+
+            // Tunnel:SshClient DatabaseHook
+            _client = TunnelProvider.CreateClient();
+            (SshClient TunnelClient, ForwardedPortLocal PortLocal) tunnel =
+                TunnelProvider.HookDatabase(_client, endpoint, port);
+            _client = tunnel.TunnelClient;
+
+            // Check:Active SshClientConnections
+            TunnelProvider.ActiveSshConnections(_client);
+
+            // Check:Tunnel WebPortForwardState
+            TunnelProvider.SshPortForwardState(_client);
+
+            // Set:Database Connection String
+            _connectionStr =
+                new NpgsqlConnectionStringBuilder(_dbSection["ConnectionString"])
+                {
+                    Host = tunnel.PortLocal.BoundHost,
+                    Port = (int)tunnel.PortLocal.BoundPort,
+                    CommandTimeout = 30,
+                    KeepAlive = 30,
+                }.ToString();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
