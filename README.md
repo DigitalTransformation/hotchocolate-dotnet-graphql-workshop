@@ -4,7 +4,7 @@ In this demo, we build out a consumable GraphQL API server with HotChocolate.NET
 
 Here's an overview of the AWS VPC:
 
-![]()
+![AWS VPC Diagram](Docs/aws-vpc.svg)
 
 ### Data Model Overview
 
