@@ -10,3 +10,12 @@
 **/obj/
 **/build/
 **/bin/
+
+# Securables
+Deploy/*.ssh
+Deploy/*.pem
+**/.seed
+**/appsettings.*.json
+
+# Logs
+**/logs
