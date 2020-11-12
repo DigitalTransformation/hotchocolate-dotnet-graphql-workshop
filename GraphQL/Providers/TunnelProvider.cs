@@ -13,13 +13,13 @@ namespace GraphQL.Providers
         private static IConfiguration _configuration =>
             Startup.Configuration;
 
-        private static IConfigurationSection _sshConfig =
+        private static readonly IConfigurationSection _sshConfig =
             _configuration.GetSection("DataBinding:SshTunnel");
 
         public static SshClient CreateClient()
         {
             // Create Instance T<SshClient>
-            PrivateKeyFile keyFile = new PrivateKeyFile($@"{_sshConfig["KeyPair"]}");
+            PrivateKeyFile keyFile = new PrivateKeyFile($"{_sshConfig["KeyPair"]}");
             return new SshClient(
                 _sshConfig["Endpoint"],
                 short.Parse(_sshConfig["Port"]),
@@ -67,7 +67,7 @@ namespace GraphQL.Providers
         public static string ActiveSshConnections(SshClient client)
         {
             // State:SshdConnections
-            string cmd = $"sudo lsof -i -n | grep sshd";
+            const string cmd = "sudo lsof -i -n | grep sshd";
             string replConsole = client.RunCommand(cmd).Result;
             _logger.LogInformation(replConsole);
 
@@ -95,7 +95,7 @@ namespace GraphQL.Providers
                 .ReadAsStringAsync()
                 .GetAwaiter().GetResult();
 
-            bool state = !string.IsNullOrEmpty(content) ? true : false;
+            bool state = !string.IsNullOrEmpty(content);
 
             _logger.LogInformation($"Tunnel Endpoint Response: {content} \n Tunnel State: {state}");
 
