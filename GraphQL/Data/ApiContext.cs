@@ -9,7 +9,7 @@ namespace GraphQL.Data
 
     public class ApiContext : DbContext
     {
-        private readonly ILogger<ApiContext> _logger;
+        private static ILogger _logger => LogProvider.CreateLogger<ApiContext>();
 
         private static IConfiguration _configuration =>
             Startup.Configuration;
@@ -21,11 +21,9 @@ namespace GraphQL.Data
 
         private static SshClient _client;
 
-        public ApiContext(DbContextOptions<ApiContext> options, ILogger<ApiContext> logger)
+        public ApiContext(DbContextOptions<ApiContext> options)
             : base(options)
         {
-            _logger = logger;
-
             // Build Default ConnStr
             string endpoint = new NpgsqlConnectionStringBuilder(_dbSection["ConnectionString"]).Host;
             _logger.LogInformation($"Buffer endpoint: {endpoint}");

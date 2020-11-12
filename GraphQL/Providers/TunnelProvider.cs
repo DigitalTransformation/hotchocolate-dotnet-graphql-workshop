@@ -8,7 +8,7 @@ namespace GraphQL.Providers
 
     public class TunnelProvider
     {
-        private static readonly ILogger<TunnelProvider> _logger;
+        private static readonly ILogger _logger = LogProvider.CreateLogger<TunnelProvider>();
 
         private static IConfiguration _configuration =>
             Startup.Configuration;
