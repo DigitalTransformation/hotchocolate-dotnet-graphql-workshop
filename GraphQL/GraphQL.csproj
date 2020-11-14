@@ -12,4 +12,11 @@
   <ItemGroup Label="Helpers">
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.261" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="*.pem">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
 </Project>
