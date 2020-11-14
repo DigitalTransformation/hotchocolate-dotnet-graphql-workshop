@@ -66,9 +66,6 @@ namespace GraphQL.Data
             base.OnConfiguring(optionsBuilder);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-        }
+        public DbSet<Speaker> Speakers { get; set; }
     }
 }
