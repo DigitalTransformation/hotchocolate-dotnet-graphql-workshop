@@ -15,9 +15,11 @@ namespace GraphQL
         private readonly IWebHostEnvironment _env;
         private ILogger<Startup> _logger;
 
-        public Startup(IWebHostEnvironment env, IConfiguration configuration)
+        public Startup(
+            IWebHostEnvironment env,
+            IConfiguration configuration)
         {
-            _env = env;
+            this._env = env;
             Configuration = configuration;
             IConfigurationBuilder builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -52,10 +54,12 @@ namespace GraphQL
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapGet("/", async context => await context
+                    .Response
+                    .WriteAsync("Hello World!")
+                    .ConfigureAwait(false));
+
+                endpoints.MapGraphQL();
             });
         }
     }
