@@ -54,7 +54,6 @@ namespace GraphQL.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            _logger.LogInformation($"Using connectionStr: {_connectionStr}");
             optionsBuilder
                 .UseNpgsql(new NpgsqlConnection(_connectionStr));
 
