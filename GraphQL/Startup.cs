@@ -2,6 +2,7 @@ namespace GraphQL
 {
     using GraphQL.Data;
     using GraphQL.Providers;
+    using GraphQL.Resolvers;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -34,6 +35,9 @@ namespace GraphQL
         {
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<ApiContext>();
+
+            services.AddGraphQLServer()
+                .AddQueryType<GetSpeakers>();
         }
 
         public void Configure(
