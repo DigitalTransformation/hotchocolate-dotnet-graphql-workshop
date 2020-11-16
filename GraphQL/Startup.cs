@@ -1,6 +1,7 @@
 namespace GraphQL
 {
     using GraphQL.Data;
+    using GraphQL.Mutations;
     using GraphQL.Providers;
     using GraphQL.Resolvers;
     using Microsoft.AspNetCore.Builder;
@@ -37,7 +38,8 @@ namespace GraphQL
                 .AddDbContext<ApiContext>();
 
             services.AddGraphQLServer()
-                .AddQueryType<GetSpeakers>();
+                .AddQueryType<GetSpeakers>()
+                .AddMutationType<MutationSpeaker>();
         }
 
         public void Configure(
