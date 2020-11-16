@@ -1,0 +1,14 @@
+mutation AddSpeaker {
+    addSpeaker(input:{
+        name: "Example User",
+        bio: "Some description",
+        webSite: "http://example.com"
+    }) {
+        speaker {
+            id
+            name
+            bio
+            webSite
+        }
+    }
+}
