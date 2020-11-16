@@ -1,0 +1,6 @@
+query GetSpeakerNames {
+    ISpeakersQueryable {
+        id
+        name
+    }
+}
