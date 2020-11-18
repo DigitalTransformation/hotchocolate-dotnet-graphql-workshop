@@ -1,5 +1,6 @@
 namespace GraphQL.Data
 {
+    using System;
     using GraphQL.Providers;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
