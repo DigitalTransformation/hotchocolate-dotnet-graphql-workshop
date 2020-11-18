@@ -1,0 +1,8 @@
+query GetSpeakerById {
+    speaker(id: 1) {
+        id
+        name
+        bio
+        webSite
+    }
+}
