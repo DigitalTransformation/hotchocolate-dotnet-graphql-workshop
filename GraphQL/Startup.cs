@@ -35,7 +35,7 @@ namespace GraphQL
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddEntityFrameworkNpgsql()
-                .AddDbContext<ApiContext>();
+                .AddDbContextFactory<ApiContext>();
 
             services.AddGraphQLServer()
                 .AddQueryType<GetSpeakers>()
